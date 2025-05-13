@@ -1,0 +1,18 @@
+{
+  "piedra-papel-tijera": {
+    "nombre": "Piedra, Papel o Tijera",
+    "descripcion": "Juego clásico donde el jugador compite contra la computadora eligiendo entre piedra, papel o tijera.",
+    "instrucciones": [
+      "Hacé clic en una de las opciones: piedra, papel o tijera.",
+      "La computadora elegirá aleatoriamente su opción.",
+      "Ganá puntos venciendo la elección de la computadora.",
+      "Reiniciá la puntuación cuando quieras con el botón correspondiente."
+    ],
+    "temas": [
+      "Condicionales",
+      "Eventos de clic",
+      "Comparación de valores"
+    ],
+    "url": "https://game.1001problemas.com/juegos/piedra_papel_o_tijera/"
+  }
+}
