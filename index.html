@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piedra, Papel o Tijera</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .option {
+            cursor: pointer;
+            transition: transform 0.2s;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            width: 100px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .option:hover {
+            transform: scale(1.1);
+            background-color: #e0e0e0;
+        }
+        .option img {
+            width: 70px;
+            height: 70px;
+        }
+        .results {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .choice {
+            text-align: center;
+            padding: 10px;
+            width: 45%;
+        }
+        .choice img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+        .message {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            min-height: 36px;
+        }
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+        .score {
+            text-align: center;
+        }
+        .score h3 {
+            margin: 0;
+            margin-bottom: 5px;
+        }
+        .score p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .reset {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .reset:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Piedra, Papel o Tijera</h1>
+        
+        <div class="options">
+            <div class="option" onclick="play('piedra')">
+                <img src="./images/piedra.jpg" alt="piedra">
+                <p>Piedra</p>
+            </div>
+            <div class="option" onclick="play('papel')">
+                <img src="./images/papel.jpeg" alt="papel">
+                <p>Papel</p>
+            </div>
+            <div class="option" onclick="play('tijera')">
+                <img src="./images/tijera.jpg" alt="tijera">
+                <p>Tijera</p>
+            </div>
+        </div>
+        
+        <div class="results">
+            <div class="message" id="message">Elige una opción para empezar</div>
+            <div class="choices">
+                <div class="choice">
+                    <h3>Tú</h3>
+                    <img id="user-choice" src="./images/ninña.jpeg" alt="?" style="opacity: 0.3">
+                </div>
+                <div class="choice">
+                    <h3>Computadora</h3>
+                    <img id="computer-choice" src="./images/niño.jpeg" alt="?" style="opacity: 0.3">
+                </div>
+            </div>
+        </div>
+        
+        <div class="scoreboard">
+            <div class="score">
+                <h3>Tu puntuación</h3>
+                <p id="user-score">0</p>
+            </div>
+            <div class="score">
+                <h3>Computadora</h3>
+                <p id="computer-score">0</p>
+            </div>
+        </div>
+        
+        <button class="reset" onclick="resetScores()">Reiniciar puntuación</button>
+    </div>
+
+    <script>
+        let userScore = 0;
+        let computerScore = 0;
+        const userScoreElement = document.getElementById('user-score');
+        const computerScoreElement = document.getElementById('computer-score');
+        const messageElement = document.getElementById('message');
+        const userChoiceImg = document.getElementById('user-choice');
+        const computerChoiceImg = document.getElementById('computer-choice');
+        
+        function play(userChoice) {
+            const choices = ['piedra', 'papel', 'tijera'];
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
+            
+            // Actualizar imágenes de elección
+            userChoiceImg.style.opacity = "1";
+            computerChoiceImg.style.opacity = "1";
+            
+            // Se podrían reemplazar estos placeholders con imágenes reales
+            userChoiceImg.alt = userChoice;
+            computerChoiceImg.alt = computerChoice;
+            
+            // Determinar el ganador
+            let result = determineWinner(userChoice, computerChoice);
+            
+            // Actualizar puntuación y mensaje
+            updateScore(result);
+            
+            // Actualizar mensaje
+            if (result === "empate") {
+                messageElement.textContent = "¡Empate!";
+                messageElement.style.color = "#888";
+            } else if (result === "usuario") {
+                messageElement.textContent = "¡Ganaste!";
+                messageElement.style.color = "#4CAF50";
+            } else {
+                messageElement.textContent = "¡Perdiste!";
+                messageElement.style.color = "#f44336";
+            }
+        }
+        
+        function determineWinner(userChoice, computerChoice) {
+            if (userChoice === computerChoice) {
+                return "empate";
+            }
+            
+            if (
+                (userChoice === "piedra" && computerChoice === "tijera") ||
+                (userChoice === "papel" && computerChoice === "piedra") ||
+                (userChoice === "tijera" && computerChoice === "papel")
+            ) {
+                return "usuario";
+            } else {
+                return "computadora";
+            }
+        }
+        
+        function updateScore(result) {
+            if (result === "usuario") {
+                userScore++;
+                userScoreElement.textContent = userScore;
+            } else if (result === "computadora") {
+                computerScore++;
+                computerScoreElement.textContent = computerScore;
+            }
+        }
+        
+        function resetScores() {
+            userScore = 0;
+            computerScore = 0;
+            userScoreElement.textContent = "0";
+            computerScoreElement.textContent = "0";
+            messageElement.textContent = "Elige una opción para empezar";
+            messageElement.style.color = "#333";
+            userChoiceImg.style.opacity = "0.3";
+            computerChoiceImg.style.opacity = "0.3";
+        }
+    </script>
+</body>
+</html>
